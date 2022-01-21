@@ -1,0 +1,41 @@
+{% assign t = site.data.translations[include.lang]["navbar"] %}
+{% assign hrefPrefix = site.baseurl | append: '/' %}
+{% assign linkClass = '' %} 
+
+{% if page.url == "/" %} 
+  {% assign hrefPrefix = '' %}
+  {% assign linkClass = 'page-scroll' %} 
+{% endif%}
+<nav id="hexadNav" class="navbar navbar-expand-md {{ include.navbarClasses }}">
+  <div class="container d-none d-md-flex">
+    <a href="{{ site.baseurl| append: '/' | append: page.lang | append: '/#top' }}" class="navbar-brand {{ linkClass }}">
+      <img id="hexadLogo" width="120" src="/assets/images/hexad-logo-white.png" />
+    </a>
+    <div class="collapsed">
+      <ul class="navbar-nav">
+        
+          {% for nav in t.items %}
+            {% if nav.is-button == true %}
+              {% assign btnClass = 'round-btn white' %} 
+            {% else %}
+              {% assign btnClass = '' %} 
+            {% endif%}
+          <li class="nav-item">
+            <a class="nav-link px-3 {{ linkClass }} {{btnClass}}" href="{{ nav.href }}">{{nav.title}}</a>
+          </li>
+          {% endfor %}
+          
+          <li class="nav-item dropdown px-3">
+            <a class="nav-link dropdown-toggle" href="#" id="langSelection" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{t.lang-name}}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="langSelection">
+              {% for language in t.other-languages %}
+              <li><a class="dropdown-item" href="{{language['lang-url']}}">{{ language.name }}</a></li>
+              {% endfor %}
+            </ul>
+          </li>
+      </ul>
+    </div>
+  </div>
+</nav>
