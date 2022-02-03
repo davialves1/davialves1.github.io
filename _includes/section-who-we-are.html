@@ -8,7 +8,9 @@
           <p class="lead py-4">
             {{ t.description }}
           </p>
+          {% if include.lang == "en" %}
           <a href="{{t.learn-more-url}}" class="round-btn orange">{{t.learn-more}}</a>
+          {% endif %}
         </div>
       </div>
       <div class="row mt-5 pt-5">

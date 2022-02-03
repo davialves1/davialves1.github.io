@@ -13,7 +13,5 @@ collections:
     output: false
   socialcommitments:
     output: false
-  events:
-    output: true
 
 exclude: [nbproject, yarn.lock, package.json, package-lock.json, gitlab-ci.yml, public]
