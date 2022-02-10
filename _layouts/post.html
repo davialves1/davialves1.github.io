@@ -1,21 +1,18 @@
 ---
-layout: default
+layout: inner-breadcrumb
 addCustomJs: false
 navbarClasses: 'navbar-inner'
 ---
-<div class="container-fluid bg-primary text-white p-5">
-    <div class="row">
-        <div class="col-8 mx-auto">
-            <h3>{{page.title}}</h3>
-        </div>
-    </div>
-</div>
 
-<div class="container">
-    
+<div class="container-fluid mb-5 pb-5">
     <div class="row">
-        <div class="col-8 mx-auto">
-            {{ content }} 
+        <div class="col-11 col-md-8 mx-auto pb-5">
+            <img src="{{page.image | prepend: site.baseurl}}" class="img-fluid rounded pt-2 pb-5"
+                 alt="{{page.title}}"/>
+            {{content}}
+            <p class="mt-5">
+                <strong>Author:</strong> {{page.author}}
+            </p>
         </div>
     </div>
 </div>

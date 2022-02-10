@@ -1,0 +1,180 @@
+I"}d<p>JavaScript frameworks have gained so much popularity during past few years. I remember my initial coding days when I used to be a server side developer and working on UI was not my cup of tea. I must say, the rise of frameworks like AngularJS raised my interest in front-end development.</p>
+
+<p>AngularJS is full-fledged MV* framework, so testing the code or rather TDDing Angular application becomes easy with integrated support of testing libraries like Jasmine and and runner like Karma. However, React is not a framework, its a library. It gives us the flexibility of use but at the same time TDDing React application becomes tricky and introduction of Redux adds more complexity to it.</p>
+
+<p>Today we are going to build the React-Redux application by TDD. For this case study, we will build simple Leave Management System dashboard. I already have built the leave form. It stores the record in the database whenever it is submitted. The code can be found here. Here we are going to build the dashboard which will show the list of leaves I have applied.</p>
+
+<p>Story #1 — As an employee, I should be able to view all the leaves that I have applied so that I can plan my work and vacations.</p>
+
+<h2 id="approach">Approach</h2>
+
+<p>We will build the application using Facebook’s create-react-app. Following elements are involved in the typical React-Redux application. We will build them using TDD.</p>
+
+<p>Components
+Containers
+Reducers
+Actions</p>
+
+<p>Create-react-app gives us the basic component but with no packaging structure. We will modify the project skeleton as per the domain of our application. At this point the project skeleton is looking like this-</p>
+
+<p>Note that, we have removed the unnecessary code as well. We will use enzyme as primary testing library and mocha as test runner.</p>
+
+<p>When we start TDDing React-Redux app, I try to follow specific order of adding tests and code for the component. Generally I follow bottom-up approach i.e. start building components in the following order — actions-reducers-containers-components. One can change the order as per preference.</p>
+
+<p>Let’s start with action-</p>
+
+<p>We will add a test case to make an API call to fetch the leaves-</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">it</span><span class="p">(</span><span class="dl">'</span><span class="s1">should dispatch an action to fetch the leaves</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`/leaves`</span><span class="p">).</span><span class="nx">reply</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">[</span><span class="nx">leaveFormStub</span><span class="p">]);</span>
+
+    <span class="nx">store</span><span class="p">.</span><span class="nx">dispatch</span><span class="p">(</span><span class="nx">leavesActions</span><span class="p">.</span><span class="nx">fetchLeaves</span><span class="p">())</span>
+        <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">resp</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="nx">request</span><span class="p">.</span><span class="nx">done</span><span class="p">();</span>
+            <span class="kd">let</span> <span class="nx">executedActions</span> <span class="o">=</span> <span class="nx">store</span><span class="p">.</span><span class="nx">getActions</span><span class="p">();</span>
+            <span class="nx">expect</span><span class="p">(</span><span class="nx">executedActions</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">type</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">constants</span><span class="p">.</span><span class="nx">LEAVE_FETCHING</span><span class="p">);</span>
+            <span class="nx">expect</span><span class="p">(</span><span class="nx">executedActions</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">type</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">constants</span><span class="p">.</span><span class="nx">LEAVES_FETCHED</span><span class="p">);</span>
+            <span class="nx">expect</span><span class="p">(</span><span class="nx">executedActions</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">leaves</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">deep</span><span class="p">.</span><span class="nx">equal</span><span class="p">([</span><span class="nx">leaveFormStub</span><span class="p">]);</span>
+            <span class="nx">done</span><span class="p">();</span>
+        <span class="p">})</span>
+        <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">done</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>We have mocked the server call using nock. Here we assert that whenever ‘fetchLeaves’ is called, it should dispatch two actions- 1. LEAVE_FETCHING action — this is to show spinner till the time promise gets resolved. 2. LEAVES_FETCHED action — This is to update store with fetched leaves. At this moment, the test case is red, lets add a code to make it green.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">leaveFetching</span> <span class="o">=</span> <span class="p">(</span><span class="nx">leaveId</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">({</span>
+    <span class="na">type</span><span class="p">:</span> <span class="nx">constants</span><span class="p">.</span><span class="nx">LEAVE_FETCHING</span><span class="p">,</span>
+    <span class="nx">leaveId</span>
+<span class="p">});</span><span class="kd">const</span> <span class="nx">leavesFetched</span> <span class="o">=</span> <span class="p">(</span><span class="nx">leaves</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">({</span>
+    <span class="na">type</span><span class="p">:</span> <span class="nx">constants</span><span class="p">.</span><span class="nx">LEAVES_FETCHED</span><span class="p">,</span>
+    <span class="nx">leaves</span>
+<span class="p">});</span><span class="kd">const</span> <span class="nx">fetchLeaves</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nx">dispatch</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="nx">dispatch</span><span class="p">(</span><span class="nx">leaveFetching</span><span class="p">());</span>
+        <span class="k">return</span> <span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">dispatch</span><span class="p">,</span> <span class="s2">`</span><span class="p">${</span><span class="nx">config</span><span class="p">.</span><span class="nx">serverUrl</span><span class="p">}</span><span class="s2">/leaves`</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+            <span class="dl">'</span><span class="s1">Accept</span><span class="dl">'</span><span class="p">:</span> <span class="nx">APPLICATION_JSON</span>
+        <span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">resp</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="nx">dispatch</span><span class="p">(</span><span class="nx">leavesFetched</span><span class="p">(</span><span class="nx">resp</span><span class="p">));</span>
+        <span class="p">}).</span><span class="k">catch</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="p">})</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>We have not handled the error scenario yet. Lets do that-</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">it</span><span class="p">(</span><span class="dl">'</span><span class="s1">should dispatch an action to set error when fetchLeaves returns the error</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`/leaves`</span><span class="p">).</span><span class="nx">reply</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="p">{</span><span class="na">error</span><span class="p">:</span> <span class="dl">'</span><span class="s1">error</span><span class="dl">'</span><span class="p">});</span>
+
+    <span class="nx">store</span><span class="p">.</span><span class="nx">dispatch</span><span class="p">(</span><span class="nx">leavesActions</span><span class="p">.</span><span class="nx">fetchLeaves</span><span class="p">())</span>
+        <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">resp</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="nx">request</span><span class="p">.</span><span class="nx">done</span><span class="p">();</span>
+            <span class="kd">let</span> <span class="nx">executedActions</span> <span class="o">=</span> <span class="nx">store</span><span class="p">.</span><span class="nx">getActions</span><span class="p">();</span>
+            <span class="nx">expect</span><span class="p">(</span><span class="nx">executedActions</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">type</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">constants</span><span class="p">.</span><span class="nx">LEAVE_FETCHING</span><span class="p">);</span>
+            <span class="nx">expect</span><span class="p">(</span><span class="nx">executedActions</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">type</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">constants</span><span class="p">.</span><span class="nx">LEAVE_ERROR</span><span class="p">);</span>
+            <span class="nx">expect</span><span class="p">(</span><span class="nx">executedActions</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">error</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">deep</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="dl">'</span><span class="s1">error occurred</span><span class="dl">'</span><span class="p">);</span>
+            <span class="nx">done</span><span class="p">();</span>
+        <span class="p">})</span>
+        <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">done</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Note that, we still need the spinner even if the API is going to return error. When it does so, we are expecting the LEAVE_ERROR action to be called. Lets add the code to make it green by adding the dispatch in the catch block.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">fetchLeaves</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nx">dispatch</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="nx">dispatch</span><span class="p">(</span><span class="nx">leaveFetching</span><span class="p">());</span>
+        <span class="k">return</span> <span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">dispatch</span><span class="p">,</span> <span class="s2">`</span><span class="p">${</span><span class="nx">config</span><span class="p">.</span><span class="nx">serverUrl</span><span class="p">}</span><span class="s2">/leaves`</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+            <span class="dl">'</span><span class="s1">Accept</span><span class="dl">'</span><span class="p">:</span> <span class="nx">APPLICATION_JSON</span>
+        <span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">resp</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="nx">dispatch</span><span class="p">(</span><span class="nx">leavesFetched</span><span class="p">(</span><span class="nx">resp</span><span class="p">));</span>
+        <span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">err</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="nx">dispatch</span><span class="p">(</span><span class="nx">leaveError</span><span class="p">(</span><span class="dl">'</span><span class="s1">error occurred</span><span class="dl">'</span><span class="p">))</span>
+        <span class="p">})</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>At this point of time, we are sure that whenever fetchLeaves() is called it will make an API call and set leaves or error based on response status.</p>
+
+<p>Lets build the reducer-</p>
+
+<p>Writing tests for reducer is the easiest task in the React-Redux application. Here we are going to invoke the reducer with ‘LEAVES_FETCHED’ action and expect that the leaves are updated in the store.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">it</span><span class="p">(</span><span class="dl">"</span><span class="s2">should return a new state with modified leaves when LEAVES_FETCHED action is received</span><span class="dl">"</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">leaves</span> <span class="o">=</span> <span class="p">[{</span><span class="na">dummy</span><span class="p">:</span> <span class="dl">'</span><span class="s1">dummy</span><span class="dl">'</span><span class="p">}];</span>
+    <span class="kd">const</span> <span class="nx">action</span> <span class="o">=</span> <span class="p">{</span><span class="na">type</span><span class="p">:</span> <span class="nx">constants</span><span class="p">.</span><span class="nx">LEAVES_FETCHED</span><span class="p">,</span> <span class="na">leaves</span><span class="p">:</span> <span class="nx">leaves</span><span class="p">};</span>
+
+    <span class="kd">const</span> <span class="nx">updatedState</span> <span class="o">=</span> <span class="nx">reducer</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">action</span><span class="p">);</span>
+
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">updatedState</span><span class="p">.</span><span class="nx">leaves</span><span class="p">).</span><span class="nx">deep</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">leaves</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>We have not reduced the LEAVES_FETCHED action yet. Lets do that to make the test green. We will add a case in the reducer to handle this ‘type’ of action.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">case</span> <span class="nx">constants</span><span class="p">.</span><span class="nx">LEAVES_FETCHED</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">assign</span><span class="p">({},</span> <span class="nx">state</span><span class="p">,</span> <span class="p">{</span>
+        <span class="na">leaves</span><span class="p">:</span> <span class="nx">action</span><span class="p">.</span><span class="nx">leaves</span><span class="p">,</span>
+        <span class="na">status</span><span class="p">:</span> <span class="dl">"</span><span class="s2">SUCCESS</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">error</span><span class="p">:</span> <span class="kc">null</span>
+    <span class="p">});</span>
+</code></pre></div></div>
+
+<p>Bingo!! its green. However, we have not handled the error action yet. Here it comes-</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// TEST</span>
+<span class="nx">it</span><span class="p">(</span><span class="dl">"</span><span class="s2">should return a new state with status ERROR when a LEAVE_ERROR action is received</span><span class="dl">"</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">error</span> <span class="o">=</span> <span class="p">{</span><span class="na">error</span><span class="p">:</span> <span class="dl">'</span><span class="s1">dummy</span><span class="dl">'</span><span class="p">};</span>
+    <span class="kd">const</span> <span class="nx">action</span> <span class="o">=</span> <span class="p">{</span><span class="na">type</span><span class="p">:</span> <span class="nx">constants</span><span class="p">.</span><span class="nx">LEAVE_ERROR</span><span class="p">,</span> <span class="na">error</span><span class="p">:</span> <span class="nx">error</span><span class="p">};</span>
+
+    <span class="kd">const</span> <span class="nx">updatedState</span> <span class="o">=</span> <span class="nx">reducer</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">action</span><span class="p">);</span>
+
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">updatedState</span><span class="p">.</span><span class="nx">error</span><span class="p">).</span><span class="nx">deep</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+<span class="p">});</span><span class="c1">// CODE</span>
+<span class="k">case</span> <span class="nx">constants</span><span class="p">.</span><span class="nx">LEAVE_ERROR</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">assign</span><span class="p">({},</span> <span class="nx">state</span><span class="p">,</span> <span class="p">{</span>
+        <span class="na">error</span><span class="p">:</span> <span class="nx">action</span><span class="p">.</span><span class="nx">error</span><span class="p">,</span>
+        <span class="na">status</span><span class="p">:</span> <span class="dl">"</span><span class="s2">ERROR</span><span class="dl">"</span>
+    <span class="p">});</span>
+</code></pre></div></div>
+
+<p>At this point, we are sure that whenever fetchLeaves API is called, its response data i.e. leaves are stored in the Redux store.</p>
+
+<p>Lets build the container now-</p>
+
+<p>We are going to build the dashboard container. It will pass the ‘fetchLeaves’ method and ‘leaves’ from the store as props to the connected component i.e. dashboard.jsx. The way I test it, is by making an attempt to call the fetchLeaves function, which should be available in the props of mounted enzyme wrapper. We can assert on the actions being dispatched when it is invoked.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">it</span><span class="p">(</span><span class="dl">'</span><span class="s1">should pass fetchLeaves as props to the connected component</span><span class="dl">'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">store</span> <span class="o">=</span> <span class="nx">mockStore</span><span class="p">({</span><span class="na">leaves</span><span class="p">:</span> <span class="p">{}});</span>
+    <span class="kd">let</span> <span class="nx">shallowWrapper</span> <span class="o">=</span> <span class="nx">wrapper</span><span class="p">.</span><span class="nx">dive</span><span class="p">({</span><span class="na">context</span><span class="p">:</span> <span class="p">{</span><span class="nx">store</span><span class="p">}});</span>
+    <span class="nx">shallowWrapper</span><span class="p">.</span><span class="nx">prop</span><span class="p">(</span><span class="dl">'</span><span class="s1">fetchLeaves</span><span class="dl">'</span><span class="p">)();</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">store</span><span class="p">.</span><span class="nx">getActions</span><span class="p">()[</span><span class="mi">0</span><span class="p">].</span><span class="nx">type</span><span class="p">).</span><span class="nx">deep</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="dl">'</span><span class="s1">LEAVE_FETCHING</span><span class="dl">'</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>If we run above test, it will fail as it will not find fetchLeaves function in the props. Lets add this function in ‘mapDispatchToProps’ on the container.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">mapDispatchToProps</span> <span class="o">=</span> <span class="p">(</span><span class="nx">dispatch</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="na">fetchLeaves</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="nx">dispatch</span><span class="p">(</span><span class="nx">leavesActions</span><span class="p">.</span><span class="nx">fetchLeaves</span><span class="p">())</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>And.. its green!!</p>
+
+<p>Lets do the same trick for the ‘leaves’.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">it</span><span class="p">(</span><span class="dl">'</span><span class="s1">should pass leaves to connected component</span><span class="dl">'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">leaves</span> <span class="o">=</span> <span class="p">[{</span><span class="na">dummy</span><span class="p">:</span> <span class="dl">'</span><span class="s1">dummy</span><span class="dl">'</span><span class="p">}];</span>
+    <span class="kd">const</span> <span class="nx">store</span> <span class="o">=</span> <span class="nx">mockStore</span><span class="p">({</span><span class="na">leaves</span><span class="p">:</span> <span class="p">{</span><span class="na">leaves</span><span class="p">:</span> <span class="nx">leaves</span><span class="p">}});</span>
+    <span class="kd">let</span> <span class="nx">shallowWrapper</span> <span class="o">=</span> <span class="nx">wrapper</span><span class="p">.</span><span class="nx">dive</span><span class="p">({</span><span class="na">context</span><span class="p">:</span> <span class="p">{</span><span class="nx">store</span><span class="p">}});</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">shallowWrapper</span><span class="p">.</span><span class="nx">prop</span><span class="p">(</span><span class="dl">'</span><span class="s1">leaves</span><span class="dl">'</span><span class="p">)).</span><span class="nx">deep</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">leaves</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+:ET
