@@ -27,3 +27,7 @@ $orange-darker-background: #D54800;
 @import "section-social-commitment";
 @import "section-build-together";
 @import "footer";
+
+body {
+    overflow-x: hidden;
+}
