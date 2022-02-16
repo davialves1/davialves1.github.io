@@ -29,7 +29,7 @@
             <a class="nav-link dropdown-toggle" href="#" id="langSelection" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               {{t.lang-name}}
             </a>
-            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="langSelection">
+            <ul class="dropdown-menu shadow" aria-labelledby="langSelection">
               {% for language in t.other-languages %}
               <li><a class="dropdown-item" href="{{language['lang-url']}}">{{ language.name }}</a></li>
               {% endfor %}

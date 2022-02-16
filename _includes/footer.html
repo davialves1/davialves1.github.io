@@ -1,4 +1,13 @@
 {% assign t = site.data.translations[include.lang]["footer"] %}
+{% assign navbar = site.data.translations[include.lang]["navbar"] %}
+{% assign hrefPrefix = site.baseurl | append: '/' %}
+{% assign linkClass = '' %} 
+
+{% if page.url == "/" %} 
+  {% assign hrefPrefix = '' %}
+  {% assign linkClass = 'page-scroll' %} 
+{% endif%}
+
 <footer>
     <div class="container-fluid footer dark">
         <div class="container">
@@ -13,17 +22,22 @@
                                 <div class="col-10 col-md mx-auto mt-5 mt-md-0">
                                     <ul>
                                         <li class="section-head">{{ t.about-us }}</li>
-                                        <li>{{ t.our-experience }}</li>
-                                        <li>{{ t.clients-and-partners }}</li>
-                                        <li>{{ t.our-work }}</li>
+                                        {% assign navlink = navbar.items | where: "is-button", "false"  %} 
+                                        {% for nav in navlink %}
+                                        <li>
+                                        <a class="{{ linkClass }}" href="{{ nav.href }}">{{nav.title}}</a>
+                                      </li>
+                                      {% endfor %}
+
+
                                         <li><a href="{{'/blog' | prepend: site.url}}">Blog</a></li>
                                     </ul>
                                 </div>
                                 <div class="col-10 col-md mx-auto mt-5 mt-md-0">
                                     <ul>
                                         <li class="section-head">{{ t.contact }}</li>
-                                        <li>{{ t.get-in-touch }}</li>
-                                        <li>{{ t.career-at-hexad }}</li>
+                                        <li><a href="mailto:contact@hexad.de" target="_blank"> {{t.get-in-touch }}</a></li>
+                                        <li><a href="/en/career.html">{{ t.career-at-hexad }}</a></li>
                                     </ul>
                                 </div>
                                 <div class="col-10 col-md mx-auto mt-5 mt-md-0">

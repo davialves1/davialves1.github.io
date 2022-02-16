@@ -5,14 +5,19 @@ en:
     items:
       - title: "Who We Are"
         href: "/en/#who-we-are"
+        is-button: false
       - title: "Our Services"
         href: "/en/#our-services"
+        is-button: false
       - title: "Our Clients"
         href: "/en/#our-clients"
+        is-button: false
       - title: "Our Works"
         href: "/en/#our-works"
+        is-button: false
       - title: "Career"
         href: "/en/career.html"
+        is-button: false
       - title: "Get In Touch"
         href: "/en/#build-together"
         is-button: true
@@ -116,12 +121,16 @@ de:
     items:
       - title: "Wer wir sind"
         href: "/de/#who-we-are"
+        is-button: false
       - title: "Unsere Dienstleistungen"
         href: "/de/#our-services"
+        is-button: false
       - title: "Unsere Kunden"
         href: "/de/#our-clients"
+        is-button: false
       - title: "Unsere Arbeiten"
         href: "/de/#our-works"
+        is-button: false
       - title: "Kontakt"
         href: "/de/#build-together"
         is-button: true
