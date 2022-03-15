@@ -4,15 +4,9 @@ addCustomJs: false
 navbarClasses: 'navbar-inner'
 ---
 
-<div class="container-fluid mb-5 pb-5">
-    <div class="row">
-        <div class="col-11 col-md-8 mx-auto pb-5">
             <img src="{{page.image | prepend: site.baseurl}}" class="img-fluid rounded pt-2 pb-5"
                  alt="{{page.title}}"/>
             {{content}}
             <p class="mt-5">
                 <strong>Author:</strong> {{page.author}}
             </p>
-        </div>
-    </div>
-</div>
