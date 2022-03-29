@@ -1,27 +1,29 @@
 $(document).ready(function () {
+    console.log('dom ready')
     handleScroll();
 });
 
-$(document).scroll(function () {
+$(document).on('scroll', () => {
     handleScroll();
-});
+})
 
 function handleScroll() {
     var scrollValue = $(this).scrollTop();
     handleNavbar(scrollValue);
+
+    console.log(window.innerHeight)
+    if (window.innerHeight < 700) {
+        handleNavbar(2);
+    }
 }
 
 function handleNavbar(scrollValue) {
-    if (scrollValue > 200) {
-        // $('#hexadNav').hide();
-        if (window.innerWidth > 768) {
-          $('#hexadNav').addClass('navbar-white');
-        }
+    if (scrollValue > 1) {
+        $('#hexadNav').addClass('navbar-white');
         $('#hexadNav').removeClass('navbar-transparent');
         $('#hexadLogo').attr('src', "/assets/images/hexad-logo.png");
     }
     else {
-        // $('#hexadNav').show();
         $('#hexadNav').addClass('navbar-transparent');
         $('#hexadNav').removeClass('navbar-white');
         $('#hexadLogo').attr('src', "/assets/images/hexad-logo-white.png");

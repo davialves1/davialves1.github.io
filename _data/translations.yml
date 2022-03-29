@@ -42,7 +42,7 @@ en:
       description: We work in balanced teams to fulfill customer desirability, business viability and technology feasibility. We value team collaboration and quick feedback to better deliver the solution.
     providing-services:
       title: Providing services world-wide
-      description: Our teams are situated at various locations worldwide, closer to our customers in Wolfsburg, Berlin, Hanover, Barcelona and Bengalore.
+      description: Our teams are situated at various locations worldwide, closer to our customers in Wolfsburg, Berlin, Hanover, Frankfurt, Barcelona and Bengalore.
     helping-companies:
       title: Helping companies over a decade
       description: For the past 10+ years, we are helping organizations create innovative and sustainable digital products.
@@ -155,7 +155,7 @@ de:
       description: Wir arbeiten in ausgewogenen Teams, um Kundenwünsche, Wirtschaftlichkeit und technologische Machbarkeit zu erfüllen. Wir schätzen die Zusammenarbeit im Team und schnelles Feedback, um die Lösung besser zu liefern.
     providing-services:
       title: Bereitstellung von Dienstleistungen weltweit
-      description: Unsere Teams befinden sich an verschiedenen Standorten weltweit, näher bei unseren Kunden in Wolfsburg, Berlin, Hannover, Barcelona und Bangalore.
+      description: Unsere Teams befinden sich weltweit stets in Kundennähe an den verschiedenen Standorten in Wolfsburg, Berlin, Hannover, Frankfurt, Barcelona und Bangalore.
     helping-companies:
       title: Unterstützung von Unternehmen über ein Jahrzehnt
       description: Seit über 10 Jahren unterstützen wir Unternehmen bei der Entwicklung innovativer und nachhaltiger digitaler Produkte.
@@ -174,13 +174,13 @@ de:
     learn-more: Mehr erfahren
     learn-more-url: /de/expertise.html
     develop-with-high-standards-title: Development mit höchsten Standards
-    develop-with-high-standards-description: Wir entwickeln Produkte indem wir den gesamten Entwicklungs-prozess abdecken, vom Konzept bis zur Marktreife, mit agilen und leanen Methoden.
+    develop-with-high-standards-description: Wir entwickeln Produkte indem wir den gesamten Entwicklungsprozess abdecken, vom Konzept bis zur Marktreife, mit agilen und schlanken Methoden.
     strategy-is-safe-title: Ihr Strategie ist bei uns in guten Händen
     strategy-is-safe-description: Die digitale Strategie konzentriert sich auf den Technologieeinsatz zur Verbesserung der Geschäfts- und Markenleistung, durch die Entwicklung neuer Produkte oder Neugestaltung bestehender Prozesse.
-    easy-to-use-products-title: Development mit höchsten Standards
-    easy-to-use-products-description: Wir entwickeln Produkte indem wir den gesamten Entwicklungs-prozess abdecken, vom Konzept bis zur Marktreife, mit agilen und leanen Methoden.
+    easy-to-use-products-title: Einfach zu bedienende digitale Produkte
+    easy-to-use-products-description: Produktdesign ist ein entscheid-ender Faktor für die Entwicklung von erstklassigen Produkten. Wir  beürcksichtigen Bedürfnisse, Bedenken und Frustrationen der Nutzer und verbinden diese mit Ihren Geschäftszielen.
     data-engineering-solutions-title: Data-Engineering Lösungen
-    data-engineering-solutions-description: Wir setzen uns mit Leidenschaft für die Umsetzung von Daten und die Lösung Ihrer schwierigsten Probleme ein. Wir bringen Ihnen nahe, wie Sie Data Engeneering anwenden und produktions-bereite Dateninfrastruktur aufbauen können.
+    data-engineering-solutions-description: Wir setzen uns mit Leidenschaft für die Umsetzung von Daten und die Lösung Ihrer schwierigsten Probleme ein. Wir bringen Ihnen nahe, wie Sie Data Engineering anwenden die produktionsbereite Dateninfrastruktur aufbauen können.
 
   #eof-section-fields-of-expertise
 
@@ -202,12 +202,12 @@ de:
   section-build-together:
     title: Lassen Sie uns gemeinsam etwas <br/>Großartiges bauen!
     have-a-project:
-      title: Habe ein Projekt
+      title: Habe Sie ein Projekt?
       description: "<p>Brauchen Sie Hilfe bei einem aktuellen oder anstehenden Projekt?</p> <p>Kontaktieren Sie unser Vertriebsteam noch heute: sales@hexad.de</p>"
       button-text: Schreiben Sie uns eine E-Mail
     we-are-hiring:
       title: Wir stellen ein!
-      description: "Finden Sie Ihre nächste Herausforderung bei <br/>Hexad. Wir sind ein Team von kreativen <br/>Menschen, die Ideen für <br/>Produkte, Dienstleistungen und Unternehmen entwickeln. <br/>E-Mail: rekrutierung@hexad.de"
+      description: "Finden Sie Ihre nächste Herausforderung bei <br/>Hexad. Wir sind ein Team von kreativen <br/>Menschen, die Ideen für <br/>Produkte, Dienstleistungen und Unternehmen entwickeln. <br/>E-Mail: recruitment@hexad.de"
       button-text: Offene Stellen auf LinkedIn
   #eof-section-social-commitment
 
@@ -220,7 +220,7 @@ de:
     get-in-touch: In Kontakt kommen
     career-at-hexad: Karriere bei Hexad
     our-locasions: Unsere Standorte
-    social: Sozial
+    social: Social Media
     copyright: Alle Rechte vorbehalten
     legal-notice: Impressum
     privacy-policy: Datenschutz-Bestimmungen
