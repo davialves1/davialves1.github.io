@@ -1,0 +1,100 @@
+#hexadNav {
+  -webkit-transition: all 210ms cubic-bezier(0.4, 0.14, 0.3, 1);
+  -moz-transition: all 210ms cubic-bezier(0.4, 0.14, 0.3, 1);
+  -o-transition: all 210ms cubic-bezier(0.4, 0.14, 0.3, 1);
+  transition: all 210ms cubic-bezier(0.4, 0.14, 0.3, 1);
+}
+
+.navbar-transparent {
+  background: none !important;
+  height: 180px;
+  & .navbar-nav {
+    & .nav-item {
+      padding-bottom: 8px;
+      & .nav-link {
+        font-size: 16px;
+        font-weight: 400;
+        color: $white;
+        padding: 0px;
+        margin-top: 24px;
+        white-space: nowrap;
+        &:hover {
+          color: $black;
+        }
+      }
+      & .round-btn {
+        color: $primary-orange;
+        font-size: 13.4px;
+        font-weight: bold;
+        line-height: 16px;
+        padding: 14px 40px;
+        margin-top: 12px;
+      }
+    }
+  }
+}
+
+.navbar-white {
+  height: 96px;
+  background-color: rgba(255, 255, 255, 1);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
+  
+  .navbar-nav {
+    & .nav-item {
+      padding-bottom: 8px;
+    }
+    & .nav-link {
+      font-size: 16px;
+      font-weight: 400;
+      margin-top: 24px;
+      color: #FF5B5B;
+      padding: 0px;
+      white-space: nowrap;
+      &:hover {
+        color: $black;
+      }
+    }
+    & .round-btn {
+      background-color: $primary-orange;
+      color: $white;
+      font-size: 13.4px;
+      font-weight: bold;
+      line-height: 16px;
+      padding: 14px 40px;
+      margin-top: 12px;
+    }
+    & .round-btn:hover {
+      background-color: $orange-darker-background;
+      color: white;
+    }
+  }
+}
+
+.navbar-inner {
+  background: linear-gradient(45deg, #D98548 1.79%, #FF5B5B 98.21%);;
+  height: 180px;
+  & .navbar-nav {
+    & .nav-item {
+      padding-bottom: 8px;
+      & .nav-link {
+        font-size: 16px;
+        font-weight: 400;
+        color: $white;
+        padding: 0px;
+        margin-top: 24px;
+        white-space: nowrap;
+        &:hover {
+          color: $black;
+        }
+      }
+      & .round-btn {
+        color: $primary-orange;
+        font-size: 13.4px;
+        font-weight: bold;
+        line-height: 16px;
+        padding: 14px 40px;
+        margin-top: 12px;
+      }
+    }
+  }
+}

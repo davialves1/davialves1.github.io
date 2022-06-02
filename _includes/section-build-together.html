@@ -1,0 +1,29 @@
+{% assign t = site.data.translations[include.lang]["section-build-together"] %}
+<section class="bg-light-grey" id="build-together">
+    <div class="container-fluid">
+            <div class="row">
+                <div class="col text-center">
+                    <h1>{{ t.title }}</h1>
+                </div>
+            </div>
+            <div class="row mt-5 pt-5">
+                <div class="offset-1 col-10 mx-auto col-sm-4 px-5">
+                    <h3>{{ t.have-a-project.title }}</h3>
+                        {{ t.have-a-project.description }}
+                </div>
+                <div class="col-10 mx-auto col-sm-4 offset-2 px-5 mt-5 mt-sm-0">
+                    <h3>{{ t.we-are-hiring.title }}</h3>
+                    <p>{{ t.we-are-hiring.description }}</p>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="offset-md-1 col-xs-4 col-12 col-md-4 pb-5 pb-md-0 p-md-5">
+                    <a href="mailto:contact@hexad.de" target="_blank" class="round-btn white">{{ t.have-a-project.button-text }}</a>
+                </div>
+                <div class="col-xs-5 col-12 col-md-4 offset-md-2 p-md-5">
+                    <!-- TODO: external link icon -->
+                    <a class="round-btn white" href="https://www.linkedin.com/company/hexad-gmbh/mycompany/" target="_blank">{{ t.we-are-hiring.button-text }}</a>
+                </div>
+            </div>
+    </div>
+</section>
